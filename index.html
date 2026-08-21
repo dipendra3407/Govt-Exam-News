@@ -4,308 +4,98 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Govt Exam News</title>
-
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f4f6f9;
-  color:#222;
-}
-header{
-  background:#123b72;
-  color:white;
-  padding:18px 15px;
-  text-align:center;
-}
-header h1{margin:0;font-size:26px}
-header p{margin:6px 0 0}
-
-nav{
-  background:white;
-  padding:12px;
-  text-align:center;
-  box-shadow:0 2px 8px #ddd;
-}
-nav button{
-  margin:4px;
-  padding:9px 15px;
-  border:0;
-  border-radius:20px;
-  background:#e9eef7;
-  cursor:pointer;
-}
-
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:15px;
-}
-
-.search{
-  width:100%;
-  padding:13px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  margin-bottom:15px;
-}
-
-.news{
-  background:white;
-  margin-bottom:15px;
-  padding:17px;
-  border-radius:10px;
-  box-shadow:0 2px 8px #ddd;
-}
-.news h2{
-  margin:0 0 8px;
-  color:#123b72;
-  font-size:20px;
-}
-.news .date{
-  color:#777;
-  font-size:13px;
-  margin-bottom:10px;
-}
-
-.admin{
-  background:white;
-  padding:18px;
-  border-radius:10px;
-  box-shadow:0 2px 8px #ddd;
-  margin-top:20px;
-}
-input,textarea,select{
-  width:100%;
-  padding:12px;
-  margin:7px 0;
-  border:1px solid #ccc;
-  border-radius:7px;
-}
-textarea{min-height:100px}
-
-.btn{
-  background:#123b72;
-  color:white;
-  border:0;
-  padding:11px 18px;
-  border-radius:7px;
-  cursor:pointer;
-}
-
-footer{
-  text-align:center;
-  padding:25px;
-  color:#777;
-}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#222}
+header{background:#123b72;color:white;padding:18px 15px;text-align:center}header h1{margin:0;font-size:26px}header p{margin:6px 0 0}
+nav{background:white;padding:12px;text-align:center;box-shadow:0 2px 8px #ddd}nav button{margin:4px;padding:9px 15px;border:0;border-radius:20px;background:#e9eef7;cursor:pointer}nav button.active{background:#123b72;color:white}
+.container{max-width:900px;margin:auto;padding:15px}.search{width:100%;padding:13px;border:1px solid #ccc;border-radius:8px;margin-bottom:15px}
+.card{background:white;padding:17px;margin-bottom:15px;border-radius:10px;box-shadow:0 2px 8px #ddd}.card h2{margin:0 0 8px;color:#123b72;font-size:20px}.meta{font-size:13px;color:#777;margin-bottom:10px}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 12px;border:1px solid #ccc;border-radius:7px;font-size:15px}textarea{min-height:120px;resize:vertical}
+.btn{background:#123b72;color:white;border:0;padding:11px 18px;border-radius:7px;cursor:pointer}.btn:disabled{opacity:.6}.btn-danger{background:#b3261e}
+.row{display:flex;gap:10px;flex-wrap:wrap}.hidden{display:none}.status{padding:10px;border-radius:7px;margin:10px 0;background:#eef4ff}.small{font-size:13px;color:#666}
+footer{text-align:center;padding:25px;color:#777}
 </style>
 </head>
-
 <body>
-
-<header>
-  <h1>📢 Govt Exam News</h1>
-  <p>सरकारी नौकरी और परीक्षा की ताजा जानकारी</p>
-</header>
-
+<header><h1>📢 Govt Exam News</h1><p>सरकारी नौकरी और परीक्षा की ताजा जानकारी</p></header>
 <nav>
-  <button onclick="filterNews('सभी')">सभी</button>
-  <button onclick="filterNews('SSC')">SSC</button>
-  <button onclick="filterNews('Railway')">Railway</button>
-  <button onclick="filterNews('Rajasthan')">Rajasthan</button>
-  <button onclick="filterNews('Other')">Other</button>
+<button class="cat active" data-cat="सभी">सभी</button><button class="cat" data-cat="SSC">SSC</button>
+<button class="cat" data-cat="Railway">Railway</button><button class="cat" data-cat="Rajasthan">Rajasthan</button><button class="cat" data-cat="Other">Other</button>
 </nav>
-
 <div class="container">
+<input id="search" class="search" type="search" placeholder="🔎 खबर खोजें...">
+<div id="newsList"><div class="card">News लोड हो रही है...</div></div>
 
-<input class="search" id="search"
-placeholder="🔎 खबर खोजें..."
-oninput="showNews()">
-
-<div id="newsList">
-  <div class="news">
-    <h2>Govt Exam News में आपका स्वागत है</h2>
-    <div class="date">आज</div>
-    <p>सरकारी परीक्षाओं से जुड़ी नवीनतम जानकारी यहाँ प्रकाशित की जाएगी।</p>
-  </div>
+<div class="card">
+<h2>🔐 Admin Login</h2><p class="small">सिर्फ Firebase Admin account से News publish की जा सकती है।</p>
+<div id="loginBox">
+<input id="email" type="email" placeholder="Admin Email"><input id="password" type="password" placeholder="Password">
+<button id="loginBtn" class="btn">Login</button>
 </div>
-
-<div class="admin">
-<h2>📝 News Add करें</h2>
-
+<div id="adminBox" class="hidden">
+<div id="loginStatus" class="status"></div><h2>📝 News Add करें</h2>
 <input id="title" placeholder="News का Title">
-
-<select id="category">
-<option value="SSC">SSC</option>
-<option value="Railway">Railway</option>
-<option value="Rajasthan">Rajasthan</option>
-<option value="Other">Other</option>
-</select>
-
-<textarea id="description"
-placeholder="News की पूरी जानकारी लिखें"></textarea>
-
-<button class="btn" onclick="addNews()">News Publish करें</button>
+<select id="category"><option>SSC</option><option>Railway</option><option>Rajasthan</option><option>Other</option></select>
+<textarea id="description" placeholder="News की पूरी जानकारी लिखें"></textarea>
+<div class="row"><button id="publishBtn" class="btn">News Publish करें</button><button id="logoutBtn" class="btn btn-danger">Logout</button></div>
 </div>
-
 </div>
+</div>
+<footer>© 2026 Govt Exam News</footer>
 
-<footer>
-© 2026 Govt Exam News
-</footer>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig={
+apiKey:"AIzaSyDshmSsDYybUpBs2-UvfU7BTYDLJaMgvdY",
+authDomain:"govt-exam-news-1beb1.firebaseapp.com",
+projectId:"govt-exam-news-1beb1",
+storageBucket:"govt-exam-news-1beb1.firebasestorage.app",
+messagingSenderId:"63843622878",
+appId:"1:63843622878:web:7e8c51db8453f0741f474f",
+measurementId:"G-ZTQSLWPWHH"};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(),db=firebase.firestore();let currentCategory="सभी",allNews=[];
 
-<script type="module">
+auth.onAuthStateChanged(user=>{
+document.getElementById("loginBox").classList.toggle("hidden",!!user);
+document.getElementById("adminBox").classList.toggle("hidden",!user);
+if(user)document.getElementById("loginStatus").textContent="Admin login: "+(user.email||"");
+});
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+document.getElementById("loginBtn").onclick=async()=>{
+const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+if(!email||!password)return alert("Email और Password डालें।");
+try{await auth.signInWithEmailAndPassword(email,password);alert("Login सफल!")}catch(e){alert("Login failed: "+e.message)}
+};
+document.getElementById("logoutBtn").onclick=()=>auth.signOut();
 
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+db.collection("news").orderBy("createdAt","desc").onSnapshot(s=>{
+allNews=s.docs.map(d=>({id:d.id,...d.data()}));renderNews();
+},e=>document.getElementById("newsList").innerHTML='<div class="card"><b>Firebase error:</b> '+escapeHtml(e.message)+'</div>');
 
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDshmSsDYybUpBs2-UvfU7BTYDLJaMgvdY",
-  authDomain: "govt-exam-news-1beb1.firebaseapp.com",
-  projectId: "govt-exam-news-1beb1",
-  storageBucket: "govt-exam-news-1beb1.firebasestorage.app",
-  messagingSenderId: "63843622878",
-  appId: "1:63843622878:web:7e8c51db8453f0741f474f",
-  measurementId: "G-ZTQSLWPWHH"
+document.getElementById("publishBtn").onclick=async()=>{
+const user=auth.currentUser;if(!user)return alert("पहले Admin Login करें।");
+const title=document.getElementById("title").value.trim(),category=document.getElementById("category").value,description=document.getElementById("description").value.trim();
+if(!title||!description)return alert("Title और News की जानकारी भरें।");
+const b=document.getElementById("publishBtn");b.disabled=true;b.textContent="Publishing...";
+try{await db.collection("news").add({title,category,description,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:user.email||user.uid});
+document.getElementById("title").value="";document.getElementById("description").value="";alert("News Firebase में Publish हो गई!");
+}catch(e){alert("Publish failed: "+e.message)}finally{b.disabled=false;b.textContent="News Publish करें"}
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+document.querySelectorAll(".cat").forEach(b=>b.onclick=()=>{
+document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));b.classList.add("active");currentCategory=b.dataset.cat;renderNews()});
+document.getElementById("search").oninput=renderNews;
 
-let allNews = [];
-let currentCategory = "सभी";
-
-async function loadNews(){
-
-  try{
-
-    const snapshot = await getDocs(collection(db,"news"));
-
-    allNews = [];
-
-    snapshot.forEach(doc => {
-      allNews.push({
-        id:doc.id,
-        ...doc.data()
-      });
-    });
-
-    showNews();
-
-  }catch(error){
-    console.log(error);
-  }
+function renderNews(){
+const q=document.getElementById("search").value.trim().toLowerCase();
+const f=allNews.filter(n=>(currentCategory==="सभी"||n.category===currentCategory)&&((n.title||"")+" "+(n.description||"")).toLowerCase().includes(q));
+document.getElementById("newsList").innerHTML=f.length?f.map(n=>'<div class="card"><h2>'+escapeHtml(n.title||"")+'</h2><div class="meta">'+escapeHtml(n.category||"Other")+' • '+date(n.createdAt)+'</div><div>'+escapeHtml(n.description||"").replace(/\n/g,"<br>")+'</div></div>').join(""):'<div class="card">अभी कोई News उपलब्ध नहीं है।</div>';
 }
-
-
-window.addNews = async function(){
-
-  const title = document.getElementById("title").value.trim();
-  const category = document.getElementById("category").value;
-  const description = document.getElementById("description").value.trim();
-
-  if(!title || !description){
-    alert("Title और News की जानकारी भरें");
-    return;
-  }
-
-  try{
-
-    await addDoc(collection(db,"news"),{
-      title:title,
-      category:category,
-      description:description,
-      createdAt:serverTimestamp()
-    });
-
-    alert("✅ News successfully publish हो गई!");
-
-    document.getElementById("title").value="";
-    document.getElementById("description").value="";
-
-    loadNews();
-
-  }catch(error){
-
-    alert("News publish नहीं हुई। Firebase Rules check करें।");
-    console.log(error);
-
-  }
-}
-
-
-window.filterNews = function(category){
-
-  currentCategory = category;
-  showNews();
-
-}
-
-
-window.showNews = function(){
-
-  const search =
-    document.getElementById("search").value.toLowerCase();
-
-  const list =
-    document.getElementById("newsList");
-
-  list.innerHTML="";
-
-  let filtered = allNews.filter(n => {
-
-    const matchCategory =
-      currentCategory === "सभी" ||
-      n.category === currentCategory;
-
-    const matchSearch =
-      (n.title || "").toLowerCase().includes(search) ||
-      (n.description || "").toLowerCase().includes(search);
-
-    return matchCategory && matchSearch;
-
-  });
-
-  if(filtered.length === 0){
-
-    list.innerHTML = `
-      <div class="news">
-        <h2>कोई News नहीं मिली</h2>
-      </div>
-    `;
-
-    return;
-  }
-
-  filtered.forEach(n => {
-
-    list.innerHTML += `
-      <div class="news">
-        <h2>${n.title}</h2>
-        <div class="date">${n.category}</div>
-        <p>${n.description}</p>
-      </div>
-    `;
-
-  });
-
-}
-
-
-loadNews();
-
+function date(t){return t&&t.toDate?t.toDate().toLocaleString("hi-IN"):"अभी"}
+function escapeHtml(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 </script>
-
 </body>
   </html>
